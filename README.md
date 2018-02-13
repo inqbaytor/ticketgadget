@@ -29,12 +29,59 @@ POST
 
 | **Parameter [Type]** | **Required** | **Description**         | **Example**                  |
 | -------------------  | ------------ | ----------------------- | ---------------------------- |
-| appKey [String]      | yes          |  Application secret key | a0fa6814cb9040a5e887e7115d66 |
+| AppKey [String]      | yes          |  Application secret key | a0fa6814cb9040a5e887e7115d66 |
 
 **Body parameters:**
 
 | **Parameter [Type]** | **Required** | **Description**                                                     | **Example**              |
 | -------------------  | ------------ | ------------------------------------------------------------------- | ------------------------ |
-| PNR/URL/UR[booking]   | yes          | Booking identifire                                                 | VUZC3P                   |
+| PNR/URL/UR[bookingID]   | yes          | Booking identifire                                                 | VUZC3P                   |
 | GDS [String]       | no           | Optional parameter. Fallback is set to Travelport 1G | TRV-1G |
-| ticket states [String]       | no           | Optional parameter that will be send back to partner's callbak url. | NO PLATING CARRIER QUOTA |
+| ticketstates [String]       | no           | Optional parameter that will be send back to partner's callbak url. | NO PLATING CARRIER QUOTA |
+
+**Initiate User Authorization**  
+```bash
+curl -X POST -H "Content-Type: application/json" -H "appKey: a0fa6814cb9040a5e887e7115d66" -H "Cache-Control: no-cache" -d '{
+  "PNR": VUZC3P
+}' "https://sanbox.inqbaytor.io/v7/app/hit"
+```
+
+The **"GDS"** param is an optional param that you might wanna send to the API if you are using multiple GDS's, once the user triggers the authorization with ticketgadget API. The same param will be routed back to you along with the ticketstates to your callback endpoint, which will help you complete the ticketing transaction.
+
+Alternatively, you can create and keep a server-side session, using the **PNR** you get in the response.
+
+**Response**
+
+A successful request (200 response code), means your request is accepted.
+
+In the response, you'll get the corresponding PNR and the ticketstates (if set to yes) back.
+
+```json
+{
+  "VUZC3P" : "PNR": "NO PLATING CARRIER QUOTA"
+}
+```
+
+In case of failed request, the response codes in return are:
+
+- 403 Forbidden - **means the SDK login can't be used for that number (non-existing account)**
+  {
+  "code": 1008,
+  "message": "Forbidden: It is forbidden to use sdk login for this PNR."
+  }
+  
+- 404 Not Found - **means your credentials (AppKey) are not valid.**
+  {
+  "code": 404,
+  "message": "Invalid partner credentials."
+  }
+
+- 5xx Server error - **any other undefined error**
+
+Note: Once the user triggers the authorization from your app, it would be good to lock the behavior for a certain period of time (5 mins). The reason is to prevent multiple unnecessary requests in a short period of time towards our platform, and allowing proper completion of the cycle.
+
+**Method:**  
+All requests will be submitted as POST request. Make sure your service is async, since we only expect that the message is accepted from your side. The service should respond within maximum 2000 Milliseconds upon receiving the request.
+
+**Security:**  
+To ensure security and privacy, HTTPS should be used. Make sure your certificate is always valid.
