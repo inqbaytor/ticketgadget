@@ -1,21 +1,21 @@
 # ticketgadget Light Weight REST API
 
 ## Preconditions
-* You have obtained a vaild API key from http://inqbaytor.io (or sanbox)
-* You understand the booking creation requirments of your preffered GDS. Please reffer to your GDS providers website for more information
-* Your callback endpoint is ready to receve the API responce.
+* You have obtained a valid API key from http://inqbaytor.io (or sandbox)
+* You understand the booking creation requirements of your preferred GDS. Please refer to your GDS provider's website for more information
+* Your callback endpoint is ready to receive the API response.
 
 ## Getting Started
-* Request for a API key from http://inqbaytor.io
+* Request for an API key from http://inqbaytor.io
 * Once we get the request, our team will review the request and provide you with a unique "AppKey" for your app.
-* You need need to use this key in the header, for us to be able to authorize your requests😀
+* You need to use this key in the header, for us to be able to authorize your requests😀
 
 ## So, How can ticketgadget API issue your agency tickets?
 
 
 
 ## Issue ticket using PNR
-Since our system is GDS indipendent, you can just send the GDS and the PNR/URL/UR code to issue the ticket. Yes, Its that simple 👍.
+Since our system is GDS independent, you can just send the GDS and the PNR/URL/UR code to issue the ticket. Yes, Its that simple 👍.
 
 Once the user has inserted the GSD and PNR/URL/UR code, your backend services should trigger the following request to our API:
 
@@ -62,7 +62,7 @@ In the response, you'll get the corresponding PNR and the ticketstates (if set t
 }
 ```
 
-In case of failed request, the response codes in return are:
+In case of a failed request, the response codes in return are:
 
 - 403 Forbidden - **means the SDK login can't be used for that number (non-existing account)**
   {
@@ -78,10 +78,10 @@ In case of failed request, the response codes in return are:
 
 - 5xx Server error - **any other undefined error**
 
-Note: Once the user triggers the authorization from your app, it would be good to lock the behavior for a certain period of time (5 mins). The reason is to prevent multiple unnecessary requests in a short period of time towards our platform, and allowing proper completion of the cycle.
+Note: Once the user triggers the authorization from your app, it would be good to lock the behaviour for a certain period of time (5 mins). The reason is to prevent multiple unnecessary requests in a short period of time towards our platform, and allowing proper completion of the cycle.
 
 **Method:**  
-All requests will be submitted as POST request. Make sure your service is async, since we only expect that the message is accepted from your side. The service should respond within maximum 2000 Milliseconds upon receiving the request.
+All requests will be submitted as a POST request. Make sure your service is async, since we only expect that the message is accepted from your side. The service should respond within maximum 2000 Milliseconds upon receiving the request.
 
 **Security:**  
 To ensure security and privacy, HTTPS should be used. Make sure your certificate is always valid.
