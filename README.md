@@ -1,4 +1,4 @@
-# ticketgadget Light Weight REST API
+# ticketgadget API
 
 ## Preconditions
 * You have obtained a valid API key from http://inqbaytor.io (or sandbox)
